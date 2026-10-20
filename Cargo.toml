@@ -1,0 +1,23 @@
+[package]
+name = "allymailer-rust-sdk"
+version = "1.0.0"
+edition = "2021"
+rust-version = "1.70"
+description = "AllyMailer Web API client library for Rust"
+license = "MIT"
+repository = "https://github.com/allymailer/allymailer-rust-sdk"
+documentation = "https://docs.allymailer.com.ua/ua/web-api-ref"
+readme = "README.md"
+keywords = ["allymailer", "email", "api", "sdk"]
+categories = ["api-bindings", "email"]
+
+[lib]
+name = "allymailer"
+
+[dependencies]
+reqwest = { version = "0.12", default-features = false, features = ["rustls-tls"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+[dev-dependencies]
+tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
