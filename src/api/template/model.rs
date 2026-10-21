@@ -46,7 +46,7 @@ pub struct TemplateObject {
         skip_serializing_if = "Option::is_none"
     )]
     pub editor_type: Option<EditorType>,
-    /// Параметр для вибору [шаблонізатора](https://docs.allymailer.com.ua/en/template-engines) — або
+    /// Параметр для вибору [шаблонізатора](https://docs.allymailer.com.ua/ua/template-engines) — або
     /// "simple", або "velocity", або "liquid", або "none". За замовчуванням — "simple".
     #[serde(
         rename = "template_engine",
@@ -230,7 +230,7 @@ pub struct TemplateListObject {
         skip_serializing_if = "Option::is_none"
     )]
     pub editor_type: Option<EditorType>,
-    /// Параметр для вибору [шаблонізатора](https://docs.allymailer.com.ua/en/template-engines) — або
+    /// Параметр для вибору [шаблонізатора](https://docs.allymailer.com.ua/ua/template-engines) — або
     /// "simple", або "velocity", або "liquid", або "none". За замовчуванням — "simple".
     #[serde(
         rename = "template_engine",

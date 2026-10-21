@@ -51,7 +51,7 @@ pub struct MessageObject {
         skip_serializing_if = "Option::is_none"
     )]
     pub global_language: Option<String>,
-    /// Параметр для вибору [шаблонізатора](https://docs.allymailer.com.ua/en/template-engines) — або
+    /// Параметр для вибору [шаблонізатора](https://docs.allymailer.com.ua/ua/template-engines) — або
     /// "simple", або "velocity", або "liquid", або "none". За замовчуванням — "simple".
     #[serde(
         rename = "template_engine",
@@ -226,7 +226,7 @@ pub struct MessageObjectRecipientsItem {
     #[serde(rename = "email", default)]
     pub email: String,
     /// Об'єкт, що описує підстановки для конкретного отримувача (наприклад, ім'я, товар для показу саме
-    /// цьому отримувачу — див. [Шаблонізатори](https://docs.allymailer.com.ua/en/template-engines)).
+    /// цьому отримувачу — див. [Шаблонізатори](https://docs.allymailer.com.ua/ua/template-engines)).
     /// Підстановки працюють у параметрах:
     ///
     /// - body.html
@@ -255,6 +255,39 @@ pub struct MessageObjectRecipientsItem {
     /// невід'ємного десяткового цілого або UUID до 128 біт.
     #[serde(rename = "metadata", default, skip_serializing_if = "Option::is_none")]
     pub metadata: Option<HashMap<String, String>>,
+}
+
+impl MessageObjectRecipientsItem {
+    /// A recipient from `email` or `Name <email>`: the name goes to the `to_name` substitution (the name in
+    /// the "To" header), then the substitutions, if any, are added.
+    pub fn from_address(address: &str, substitutions: Option<HashMap<String, String>>) -> Self {
+        let address = address.trim();
+        let parsed = address
+            .strip_suffix('>')
+            .and_then(|rest| rest.rsplit_once('<'))
+            .filter(|(_, email)| !email.is_empty() && !email.contains('>'));
+        let (name, email) = match parsed {
+            Some((name, email)) => (name.trim().trim_matches('"'), email.trim()),
+            None => ("", address),
+        };
+        let mut merged = HashMap::new();
+        if !name.is_empty() {
+            merged.insert("to_name".to_string(), name.to_string());
+        }
+        merged.extend(substitutions.unwrap_or_default());
+        MessageObjectRecipientsItem {
+            email: email.to_string(),
+            substitutions: (!merged.is_empty()).then_some(merged),
+            ..Default::default()
+        }
+    }
+
+    /// The recipient with the metadata (it comes back in the webhook events of the recipient):
+    /// `MessageObjectRecipientsItem::from_address("Alex <alex@example.com>", None).with_metadata(...)`.
+    pub fn with_metadata(mut self, metadata: HashMap<String, String>) -> Self {
+        self.metadata = Some(metadata);
+        self
+    }
 }
 
 /// Додаткові опції.

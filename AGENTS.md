@@ -12,9 +12,9 @@ AllyMailer Rust SDK — client for the AllyMailer transactional email Web API (W
   cargo clippy -- -D warnings
   ```
 
-- **Source label.** Every request carries the query parameter `platform=rust-sdk.1.0.0`, added in one place, the shared request client (`ApiClient`); a package built on this SDK puts its own label in front: `<package>.<version>,rust-sdk.1.0.0`.
+- **Source label.** Every request carries the query parameter `platform=rust-sdk.1.1.1`, added in one place, the shared request client (`ApiClient`); a package built on this SDK puts its own label in front: `<package>.<version>,rust-sdk.1.1.1`.
 - **Tests.** Before a release the generator builds and lints the package and runs every example of docs/ and of this file against a mock of the API: no real API key, no real sends.
-- **Release.** The version (1.0.0 in Cargo.toml) and the tag `v1.0.0` come from the generator; README.md states the Web API version the release was generated from.
+- **Release.** The version (1.1.1 in Cargo.toml) and the tag `v1.1.1` come from the generator; README.md states the Web API version the release was generated from.
 - **Secrets.** Never commit API keys; the examples read `ALLYMAILER_API_KEY` from the environment.
 
 ## Integrating AllyMailer with this SDK
@@ -40,7 +40,7 @@ Rules that generated code must follow:
 - Base URL `https://cp.allymailer.com/ua/transactional/api/v1`; every method is POST with a JSON body; auth header `X-API-KEY`. The SDK does all of it.
 - First email without DNS: `domain/get-sandbox-domain` → `confirmed-email/create` (the user clicks the link within 48 hours) → `email/send` from `noreply@<sandbox-domain>` to the confirmed address. Account API key only; up to 10 confirmed addresses, 100 emails a day; the domain expires after 31 days.
 - Never ship a sandbox domain as the production sender (it is not in `domain/list`); read `from_email` from config. Production needs a verified domain: `domain/get-dns-records` → DNS records → `domain/validate-verification-record`, `domain/validate-dkim` → `domain/list`.
-- Set `message.idempotence_key` on retryable sends; retry network errors, `429` and `5xx` with backoff, not other errors unchanged. Up to 500 recipients and 10 MB per request, each attachment up to 7 MB; always `body.html` or `body.plaintext`.
+- Set `message.idempotence_key` on retryable sends; retry network errors, `429` and `5xx` with backoff, not other errors unchanged. Up to 500 recipients and 10 MB per request with the attachments in base64 (a third larger than the files); always `body.html` or `body.plaintext`.
 - Delivery events via webhook (`webhook/set`) with a fast, idempotent HTTPS handler, not polling; check the `auth` field of every notification: the MD5 of the request body with the `auth` value replaced by the API key.
 - Keep the default unsubscribe and tracking behaviour; changes go through AllyMailer support.
 - Do not invent methods or fields. Check [docs/](docs/) of this package, the [API reference](https://docs.allymailer.com.ua/ua/web-api-ref) or [llms.txt](https://docs.allymailer.com.ua/llms.txt).

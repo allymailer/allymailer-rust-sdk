@@ -7,7 +7,7 @@ use crate::client::{ApiClient, ApiError};
 /// Ви можете зберегти шаблон на боці AllyMailer і потім посилатися на нього за ідентифікатором. Це не
 /// обов'язково, але вкрай рекомендовано у разі повторюваних email-повідомлень або за великих обсягів
 /// надсилання. AllyMailer підтримує два різні синтаксиси для шаблонів, докладніше читайте
-/// [тут](https://docs.allymailer.com.ua/en/template-engines).
+/// [тут](https://docs.allymailer.com.ua/ua/template-engines).
 #[derive(Debug, Clone, Copy)]
 pub struct TemplateApi<'a> {
     client: &'a ApiClient,
