@@ -43,7 +43,7 @@ impl Configuration {
             api_key: api_key.into(),
             base_url: DEFAULT_BASE_URL.to_string(),
             timeout: Duration::from_secs(30),
-            user_agent: "allymailer-rust-sdk/1.1.1".to_string(),
+            user_agent: "allymailer-rust-sdk/1.1.2".to_string(),
             platform: None,
         }
     }
